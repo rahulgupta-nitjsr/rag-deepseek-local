@@ -13,6 +13,8 @@ class VectorStore:
         self.texts.append(text)
 
     def search(self, query, k=5):
+        if not self.texts:
+            return []  # Return an empty list if there are no texts in the store
         query_vector = self.model.encode([query])[0]
         distances, indices = self.index.search(query_vector.reshape(1, -1), k)
-        return [self.texts[i] for i in indices[0]]
+        return [self.texts[i] for i in indices[0] if i < len(self.texts)]

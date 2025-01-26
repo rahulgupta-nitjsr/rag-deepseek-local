@@ -14,6 +14,8 @@ def process_and_add_pdf(file_path):
         return f"File {file_path} does not exist."
 
 def query_system(user_query):
+    if not vector_store.texts:
+        return "The vector store is empty. Please add some documents first."
     context = vector_store.search(user_query)
     prompt = f"Context: {context}\nQuestion: {user_query}\nAnswer:"
     response = generate_response(prompt)
@@ -34,4 +36,3 @@ if __name__ == "__main__":
         {"role": "user", "content": "Hello, can you summarize the content of the PDF?"}
     ]
     print(f"Chat Response: {chat_with_model(messages)}")
-
